@@ -1,0 +1,402 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro y Análisis de Educación Continua</title>
+  <!-- Tailwind (browser version) – dark‑mode vía clase -->
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Lucide icons (static SVG) -->
+  <style>
+    .icon { width: 1.25rem; height: 1.25rem; }
+    /* Los iconos SVG se invierten para que aparezcan blancos */
+    .invert { filter: invert(1); }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 font-sans min-h-screen flex flex-col">
+
+  <!-- Header con toggle de modo oscuro -->
+  <header class="bg-white dark:bg-gray-800 shadow-sm py-4 relative">
+    <h1 class="text-2xl font-semibold text-center text-white">Registro de Actividades de Educación Continua</h1>
+    <button id="themeToggle"
+            class="absolute top-2 right-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 rounded-full w-10 h-10 flex items-center justify-center">
+      <img src="https://unpkg.com/lucide-static@latest/icons/moon.svg" class="icon hidden dark:block invert" alt="Modo oscuro">
+      <img src="https://unpkg.com/lucide-static@latest/icons/sun.svg" class="icon dark:hidden invert" alt="Modo claro">
+    </button>
+  </header>
+
+  <!-- Main container -->
+  <main class="flex-1 max-w-5xl mx-auto p-4">
+
+    <!-- Formulario para añadir actividad -->
+    <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+      <h2 class="text-xl font-medium mb-4 flex items-center text-white">
+        <img src="https://unpkg.com/lucide-static@latest/icons/plus.svg" class="icon mr-2 invert" alt="Agregar"> Añadir actividad
+      </h2>
+      <form id="activityForm" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="code">Código</label><input type="text" id="code" required class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"></div>
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="type">Tipo</label><select id="type" required class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"><option value="">Seleccionar</option><option>Curso</option><option>Taller</option><option>Diplomado</option><option>Simposio</option><option>Otro</option></select></div>
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="topic">Tema</label><input type="text" id="topic" placeholder="Ej. IA, Gestión" required class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"></div>
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="cost">Costo</label><select id="cost" required class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"><option value="">Seleccionar</option><option value="con">Con costo</option><option value="sin">Sin costo</option></select></div>
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="mode">Modalidad</label><select id="mode" required class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"><option value="">Seleccionar</option><option value="virtual">Virtual</option><option value="presencial">Presencial</option></select></div>
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="year">Año</label><input type="number" id="year" min="2000" max="2100" required class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"></div>
+        <div class="col-span-1 flex items-end"><button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded flex items-center"><img src="https://unpkg.com/lucide-static@latest/icons/save.svg" class="icon mr-2 invert" alt="Guardar"> Guardar</button></div>
+      </form>
+    </section>
+
+    <!-- Filtros y exportación -->
+    <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+      <h2 class="text-xl font-medium mb-4 flex items-center text-white"><img src="https://unpkg.com/lucide-static@latest/icons/filter.svg" class="icon mr-2 invert" alt="Filtro"> Filtrar y Analizar</h2>
+      <div class="grid gap-4 md:grid-cols-5 lg:grid-cols-6">
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="filterType">Tipo</label><select id="filterType" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"><option value="">Todos</option><option>Curso</option><option>Taller</option><option>Diplomado</option><option>Simposio</option><option>Otro</option></select></div>
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="filterCost">Costo</label><select id="filterCost" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"><option value="">Todos</option><option value="con">Con costo</option><option value="sin">Sin costo</option></select></div>
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="filterMode">Modalidad</label><select id="filterMode" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"><option value="">Todos</option><option value="virtual">Virtual</option><option value="presencial">Presencial</option></select></div>
+        <div class="flex flex-col"><label class="font-medium mb-1 text-white" for="filterYear">Año (para distribución)</label><select id="filterYear" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"><option value="">Todos</option></select></div>
+        <div class="flex items-end"><button id="clearFilters" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded flex items-center"><img src="https://unpkg.com/lucide-static@latest/icons/x.svg" class="icon mr-2 invert" alt="Limpiar"> Limpiar filtros</button></div>
+        <div class="flex items-end"><button id="exportCSV" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded flex items-center"><img src="https://unpkg.com/lucide-static@latest/icons/download.svg" class="icon mr-2 invert" alt="Exportar"> Exportar CSV</button></div>
+        <div class="flex items-end"><button id="exportJSON" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded flex items-center"><img src="https://unpkg.com/lucide-static@latest/icons/file-json.svg" class="icon mr-2 invert" alt="Exportar JSON"> Exportar JSON</button></div>
+      </div>
+    </section>
+
+    <!-- Tabla de actividades -->
+    <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-medium mb-4 flex items-center text-white"><img src="https://unpkg.com/lucide-static@latest/icons/list.svg" class="icon mr-2 invert" alt="Lista"> Lista de actividades</h2>
+      <div class="overflow-x-auto"><table id="activityTable" class="min-w-full text-left border-collapse"><thead class="bg-gray-100 dark:bg-gray-700"><tr><th class="p-2 font-medium text-white">Código</th><th class="p-2 font-medium text-white">Tipo</th><th class="p-2 font-medium text-white">Tema</th><th class="p-2 font-medium text-white">Costo</th><th class="p-2 font-medium text-white">Modalidad</th><th class="p-2 font-medium text-white">Año</th><th class="p-2 font-medium text-white">Acciones</th></tr></thead><tbody class="divide-y divide-gray-200 dark:divide-gray-600"></tbody></table></div>
+    </section>
+
+    <!-- Estadísticas rápidas -->
+    <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-8">
+      <h2 class="text-xl font-medium mb-4 flex items-center text-white"><img src="https://unpkg.com/lucide-static@latest/icons/chart-bar.svg" class="icon mr-2 invert" alt="Analytics"> Estadísticas rápidas</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div class="p-4 bg-indigo-50 dark:bg-indigo-900 rounded shadow"><p class="font-medium text-gray-700 dark:text-gray-300">Total actividades</p><p id="totalCount" class="text-2xl font-bold text-indigo-700 dark:text-indigo-300">0</p></div>
+        <div class="p-4 bg-green-50 dark:bg-green-900 rounded shadow"><p class="font-medium text-gray-700 dark:text-gray-300">Con costo</p><p id="costCount" class="text-2xl font-bold text-green-700 dark:text-green-300">0</p></div>
+        <div class="p-4 bg-yellow-50 dark:bg-yellow-900 rounded shadow"><p class="font-medium text-gray-700 dark:text-gray-300">Virtual</p><p id="virtualCount" class="text-2xl font-bold text-yellow-700 dark:text-yellow-300">0</p></div>
+        <div class="p-4 bg-red-50 dark:bg-red-900 rounded shadow"><p class="font-medium text-gray-700 dark:text-gray-300">Presencial</p><p id="presencialCount" class="text-2xl font-bold text-red-700 dark:text-red-300">0</p></div>
+      </div>
+    </section>
+
+    <!-- Gráfico de tendencia anual -->
+    <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-8">
+      <h2 class="text-xl font-medium mb-4 flex items-center text-white"><img src="https://unpkg.com/lucide-static@latest/icons/trending-up.svg" class="icon mr-2 invert" alt="Tendencia"> Tendencia anual</h2>
+      <canvas id="yearChart" class="w-full h-64"></canvas>
+    </section>
+
+    <!-- Gráfico de distribución por tipo -->
+    <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-8">
+      <h2 class="text-xl font-medium mb-4 flex items-center text-white"><img src="https://unpkg.com/lucide-static@latest/icons/pie-chart.svg" class="icon mr-2 invert" alt="Distribución"> Distribución por tipo</h2>
+      <canvas id="typeChart" class="w-full h-64"></canvas>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 dark:bg-gray-800 text-center py-4 mt-8">
+    <p class="text-sm text-gray-600 dark:text-gray-300">© 2026 Herramienta de Registro – Desarrollado con ❤️ y Tailwind</p>
+  </footer>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // ---------- Almacenamiento ----------
+    const storageKey = 'educationActivities';
+    const getData = () => JSON.parse(localStorage.getItem(storageKey) || '[]');
+    const setData = (arr) => localStorage.setItem(storageKey, JSON.stringify(arr));
+
+    // ---------- Modo oscuro ----------
+    const htmlEl = document.documentElement;
+    const themeKey = 'themePreference';
+    const savedTheme = localStorage.getItem(themeKey);
+    if (savedTheme === 'dark') htmlEl.classList.add('dark');
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isDark = htmlEl.classList.toggle('dark');
+      localStorage.setItem(themeKey, isDark ? 'dark' : 'light');
+    });
+
+    // ---------- Referencias DOM ----------
+    const tbody = document.querySelector('#activityTable tbody');
+    const totalCountEl = document.getElementById('totalCount');
+    const costCountEl = document.getElementById('costCount');
+    const virtualCountEl = document.getElementById('virtualCount');
+    const presencialCountEl = document.getElementById('presencialCount');
+    const filterYearSelect = document.getElementById('filterYear');
+
+    // ---------- Gráficos ----------
+    const yearCtx = document.getElementById('yearChart').getContext('2d');
+    const yearChart = new Chart(yearCtx, {
+      type: 'bar',
+      data: { labels: [], datasets: [{ label: 'Actividades por año', data: [], backgroundColor: 'rgba(99,102,241,0.6)', borderColor: 'rgba(67,56,202,1)', borderWidth: 1, borderRadius: 4 }] },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+    });
+
+    const typeCtx = document.getElementById('typeChart').getContext('2d');
+    const typeChart = new Chart(typeCtx, {
+      type: 'pie',
+      data: { labels: [], datasets: [{ data: [], backgroundColor: ['#6366F1', '#10B981', '#F59E0B', '#EF4444', '#A78BFA'] }] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { color: 'inherit' } },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const label = context.label || '';
+                const value = context.parsed;
+                const total = context.dataset.data.reduce((a,b)=>a+b,0);
+                const percent = ((value / total) * 100).toFixed(1);
+                return `${label}: ${value} (${percent}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // ---------- Renderizado ----------
+    function renderTable(data) {
+      tbody.innerHTML = '';
+      data.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="p-2 text-white">${item.code}</td>
+          <td class="p-2 text-white">${item.type}</td>
+          <td class="p-2 text-white">${item.topic}</td>
+          <td class="p-2 text-white">${item.cost === 'con' ? 'Con costo' : 'Sin costo'}</td>
+          <td class="p-2 text-white">${item.mode === 'virtual' ? 'Virtual' : 'Presencial'}</td>
+          <td class="p-2 text-white">${item.year}</td>
+          <td class="p-2 flex space-x-2">
+            <button data-index="${idx}" class="editBtn text-indigo-600 hover:text-indigo-800"><img src="https://unpkg.com/lucide-static@latest/icons/edit.svg" class="icon invert" alt="Edit"></button>
+            <button data-index="${idx}" class="delBtn text-red-600 hover:text-red-800"><img src="https://unpkg.com/lucide-static@latest/icons/trash-2.svg" class="icon invert" alt="Delete"></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateStats(data) {
+      totalCountEl.textContent = data.length;
+      costCountEl.textContent = data.filter(i => i.cost === 'con').length;
+      virtualCountEl.textContent = data.filter(i => i.mode === 'virtual').length;
+      presencialCountEl.textContent = data.filter(i => i.mode === 'presencial').length;
+    }
+
+    function updateYearChart(data) {
+      const counts = {};
+      data.forEach(i => counts[i.year] = (counts[i.year] || 0) + 1);
+      const years = Object.keys(counts).sort((a,b)=>a-b);
+      yearChart.data.labels = years;
+      yearChart.data.datasets[0].data = years.map(y=>counts[y]);
+      yearChart.update();
+    }
+
+    function updateTypeChart(filtered) {
+      const typeCounts = {};
+      filtered.forEach(i => typeCounts[i.type] = (typeCounts[i.type] || 0) + 1);
+      const labels = Object.keys(typeCounts);
+      const data = labels.map(l=>typeCounts[l]);
+      typeChart.data.labels = labels;
+      typeChart.data.datasets[0].data = data;
+      typeChart.update();
+    }
+
+    // ---------- Push a Power BI ----------
+    const powerBiPushUrl = "YOUR_PUSH_URL";
+
+    function pushToPowerBI(row) {
+      const payload = { rows: [row] };
+      fetch(powerBiPushUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(r => { if (!r.ok) console.warn("Power BI push falló:", r.statusText); })
+      .catch(err => console.error("Error al enviar a Power BI:", err));
+    }
+
+    function syncAllToPowerBI() {
+      const data = getData();
+      data.forEach(item => {
+        const row = {
+          Código:   item.code,
+          Tipo:     item.type,
+          Tema:     item.topic,
+          Costo:    item.cost === "con" ? "Con costo" : "Sin costo",
+          Modalidad:item.mode === "virtual" ? "Virtual" : "Presencial",
+          Año:      item.year
+        };
+        pushToPowerBI(row);
+      });
+    }
+
+    // ---------- Manejo del formulario ----------
+    const form = document.getElementById('activityForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newItem = {
+        code: document.getElementById('code').value.trim(),
+        type: document.getElementById('type').value,
+        topic: document.getElementById('topic').value.trim(),
+        cost: document.getElementById('cost').value,
+        mode: document.getElementById('mode').value,
+        year: parseInt(document.getElementById('year').value, 10)
+      };
+      const data = getData();
+      data.push(newItem);
+      setData(data);
+      refreshView();
+      form.reset();
+
+      pushToPowerBI({
+        Código:   newItem.code,
+        Tipo:     newItem.type,
+        Tema:     newItem.topic,
+        Costo:    newItem.cost === "con" ? "Con costo" : "Sin costo",
+        Modalidad:newItem.mode === "virtual" ? "Virtual" : "Presencial",
+        Año:      newItem.year
+      });
+    });
+
+    // ---------- Editar / Eliminar ----------
+    tbody.addEventListener('click', (e) => {
+      if (e.target.closest('.editBtn')) {
+        const idx = e.target.closest('.editBtn').dataset.index;
+        const data = getData();
+        const item = data[idx];
+        document.getElementById('code').value = item.code;
+        document.getElementById('type').value = item.type;
+        document.getElementById('topic').value = item.topic;
+        document.getElementById('cost').value = item.cost;
+        document.getElementById('mode').value = item.mode;
+        document.getElementById('year').value = item.year;
+        data.splice(idx, 1);
+        setData(data);
+        refreshView();
+      } else if (e.target.closest('.delBtn')) {
+        const idx = e.target.closest('.delBtn').dataset.index;
+        const data = getData();
+        if (confirm('¿Eliminar esta actividad?')) {
+          data.splice(idx, 1);
+          setData(data);
+          refreshView();
+          syncAllToPowerBI();
+        }
+      }
+    });
+
+    // ---------- Filtros ----------
+    const filterType = document.getElementById('filterType');
+    const filterCost = document.getElementById('filterCost');
+    const filterMode = document.getElementById('filterMode');
+
+    function applyFilters(data) {
+      return data.filter(item => {
+        const typeMatch = filterType.value ? item.type === filterType.value : true;
+        const costMatch = filterCost.value ? item.cost === filterCost.value : true;
+        const modeMatch = filterMode.value ? item.mode === filterMode.value : true;
+        return typeMatch && costMatch && modeMatch;
+      });
+    }
+
+    function populateYearFilter(data) {
+      const years = [...new Set(data.map(i => i.year))].sort((a,b)=>a-b);
+      filterYearSelect.innerHTML = '<option value="">Todos</option>';
+      years.forEach(y => {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        filterYearSelect.appendChild(opt);
+      });
+    }
+
+    // ---------- Exportar ----------
+    document.getElementById('exportCSV').addEventListener('click', () => {
+      const data = getData();
+      if (!data.length) { alert('No hay datos para exportar.'); return; }
+      const header = ['Código','Tipo','Tema','Costo','Modalidad','Año'];
+      const rows = data.map(i => [
+        i.code,
+        i.type,
+        i.topic,
+        i.cost === 'con' ? 'Con costo' : 'Sin costo',
+        i.mode === 'virtual' ? 'Virtual' : 'Presencial',
+        i.year
+      ]);
+      const csv = [header, ...rows].map(r => r.map(v=>`"${v}"`).join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const now = new Date();
+      const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+      a.download = `actividades_${ts}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('exportJSON').addEventListener('click', () => {
+      const data = getData();
+      if (!data.length) { alert('No hay datos para exportar.'); return; }
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], {type: 'application/json;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const now = new Date();
+      const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+      a.download = `actividades_${ts}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // ---------- Refrescar vista ----------
+    function refreshView() {
+      const data = getData();
+      populateYearFilter(data);
+      const filtered = applyFilters(data);
+      const yearVal = filterYearSelect.value;
+      const distData = yearVal ? filtered.filter(i => i.year === parseInt(yearVal,10)) : filtered;
+
+      renderTable(filtered);
+      updateStats(data);
+      updateYearChart(data);
+      updateTypeChart(distData);
+    }
+
+    // ---------- Listeners ----------
+    [filterType, filterCost, filterMode, filterYearSelect].forEach(el => {
+      el.addEventListener('change', refreshView);
+    });
+    document.getElementById('clearFilters').addEventListener('click', () => {
+      filterType.value = '';
+      filterCost.value = '';
+      filterMode.value = '';
+      filterYearSelect.value = '';
+      refreshView();
+    });
+  </script>
+</body>
+</html>
+
+							<script>
+                            	
+							</script>
+                        </body>
+                        </html>
+                    
